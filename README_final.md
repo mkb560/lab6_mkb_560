@@ -287,7 +287,7 @@ The workflow uses Selenium to automate the form-based search (API# → “Search
 
 #### `data_optimize.py`- Auto-correct typo in positional data
 
- Pandas/NumPy script that groups coordinates by county, calculates medians and standard deviations, and applies geographic bounding-box logic to catch and fix severe OCR coordinate typos (e.g., latitudes/longtitudes that is near North Dakota).
+ Script based on Pandas that groups coordinates by county, calculates medians and standard deviations, and applies geographic bounding-box logic to catch and fix severe OCR coordinate typos (e.g., latitudes/longtitudes that is near North Dakota).
 
  #### `index.html`- Front End based on Leaflet
  
@@ -344,3 +344,4 @@ sudo cp index.html /var/www/html/
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
 
 ```
+
