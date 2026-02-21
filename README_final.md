@@ -35,22 +35,21 @@ Flask REST API (Backend) ↔ Leaflet.js Interactive Map (Frontend / Apache)
 
 ## 3. Code Architecture
 
-### Member A: Extraction & Database Setup
+### Mingtao Ding: Extraction & Database Setup
 * `config.py`: Global configuration (paths, DB credentials, API ports).
 * `db_setup.py`: Idempotent MySQL database and table initialization.
 * `pdf_extractor.py`: Hybrid PyMuPDF / pytesseract (150 DPI) text extraction.
 * `data_parser.py`: Complex regex parsing for 15+ fields (coordinates, casing, depths).
 * `data_loader.py`: Safe MySQL insertion (`ON DUPLICATE KEY UPDATE`).
 * `preprocess.py`: Text normalization and missing-value handling.
-
-### Member B: Scraping & Data Cleaning
-* `scrape_update_all.py`: Selenium + BeautifulSoup script that searches DrillingEdge using the extracted API numbers and updates the database with 5 new columns (Status, Type, City, Oil/Gas Production).
-* `fix_outliers_pandas.py`: Pandas/NumPy script that groups coordinates by county, calculates medians and standard deviations, and applies geographic bounding-box logic to catch and fix severe OCR coordinate typos (e.g., negative latitudes).
-
-### Member C: API, Frontend, & Deployment
 * `api_server.py`: Flask REST API serving JSON endpoints with CORS enabled. Modified to run on `host="0.0.0.0"` to accept external cloud traffic.
-* `index.html`: The frontend user interface. Uses **Leaflet.js** for interactive mapping, a Flexbox layout for the UI, and asynchronous JavaScript `fetch()` to populate clean, unified "Info Card" popups.
 
+### Yi-hsien Liu: Scraping & Data Cleaning
+* `scrape_update_all.py`: Selenium + BeautifulSoup script that searches DrillingEdge using the extracted API numbers and updates the database with 5 new columns (Status, Type, City, Oil/Gas Production).
+
+### Ke Wu: API, Frontend, & Deployment
+* `data_optimize.py`: Pandas/NumPy script that groups coordinates by county, calculates medians and standard deviations, and applies geographic bounding-box logic to catch and fix severe OCR coordinate typos (e.g., negative latitudes).
+* `index.html`: The frontend user interface. Uses **Leaflet.js** for interactive mapping, a Flexbox layout for the UI, and asynchronous JavaScript `fetch()` to populate clean, unified "Info Card" popups.
 ---
 
 ## 4. Extraction & Enrichment Results
@@ -123,4 +122,5 @@ sudo cp index.html /var/www/html/
 
 # 4. View the Map
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
+
 ```
