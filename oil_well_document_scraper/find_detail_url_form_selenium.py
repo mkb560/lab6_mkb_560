@@ -33,7 +33,7 @@ def main():
         )
         submit_btn.click()
 
-        # 等 Search Results 出現（你頁面會有 "Search Results" 文字）
+        
         wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(., 'Search Results')]")))
 
         # C3: results link — first anchor with /wells/
@@ -43,7 +43,7 @@ def main():
         href = result_link.get_attribute("href")
         result_link.click()
 
-        # 等跳轉到 well detail page
+        
         wait.until(EC.url_contains("/wells/"))
         time.sleep(0.8)
 
