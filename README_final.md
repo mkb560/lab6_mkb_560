@@ -289,10 +289,11 @@ The workflow uses Selenium to automate the form-based search (API# → “Search
 
  Script based on Pandas that groups coordinates by county, calculates medians and standard deviations, and applies geographic bounding-box logic to catch and fix severe OCR coordinate typos (e.g., latitudes/longtitudes that is near North Dakota).
 
- #### `index.html`- Front End based on Leaflet
+#### `index.html`- Front End based on Leaflet
  
  The frontend user interface. Uses **Leaflet.js** for interactive mapping, a Flexbox layout for the UI, and asynchronous JavaScript `fetch()` to populate clean, unified "Oil Well Info Card" popups.
 
+#### [Final Web Page]{oil_well_document_scraper/sample_page.png}
 
 
 ## 6. Cloud Deployment & Web Server Setup
@@ -344,4 +345,5 @@ sudo cp index.html /var/www/html/
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
 
 ```
+
 
