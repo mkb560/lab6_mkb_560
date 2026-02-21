@@ -293,7 +293,7 @@ The workflow uses Selenium to automate the form-based search (API# → “Search
  
  The frontend user interface. Uses **Leaflet.js** for interactive mapping, a Flexbox layout for the UI, and asynchronous JavaScript `fetch()` to populate clean, unified "Oil Well Info Card" popups.
 
-#### [Final Web Page]{oil_well_document_scraper/sample_page.png}
+#### [Final Web Page](oil_well_document_scraper/sample_page.png)
 
 
 ## 6. Cloud Deployment & Web Server Setup
@@ -345,5 +345,6 @@ sudo cp index.html /var/www/html/
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
 
 ```
+
 
 
