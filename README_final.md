@@ -296,24 +296,24 @@ The workflow uses Selenium to automate the form-based search (API# → “Search
 #### [Final Web Page](oil_well_document_scraper/sample_page.png)
 
 
-## 6. Cloud Deployment & Web Server Setup
+## 4. Cloud Deployment & Web Server Setup
 
 This project is deployed on a Google Cloud Platform (GCP) Ubuntu Virtual Machine. 
 
-### 6.1 Apache Web Server
+### 4.1 Apache Web Server
 * Installed via `sudo apt install apache2`.
 * The `index.html` file is hosted in the absolute root web directory: `/var/www/html/`.
 * Apache automatically serves the map frontend on default Port 80 to anyone visiting the VM's Public IP.
 
-### 6.2 Firewall & Networking Rules
+### 4.2 Firewall & Networking Rules
 To allow the frontend and backend to communicate over the public internet, the following rules were established:
 1.  **Frontend (HTTP/Port 80):** "Allow HTTP Traffic" enabled in GCP VM settings.
 2.  **Backend (Flask/Port 5001):** A custom VPC Firewall Rule (`allow-flask-api`) was created in GCP to allow Ingress TCP traffic on port 5001 from `0.0.0.0/0`.
 3.  **UFW (Ubuntu Firewall):** Ports 80 and 5001 explicitly allowed via `sudo ufw allow`.
 
-## 7. How to Run & Deploy
+## 5. How to Run & Deploy
 
-### 7.1 Local Database & Pipeline Execution
+### 5.1 Local Database & Pipeline Execution
 ```bash
 # 1. Activate virtual environment and install requirements
 python3 -m venv .venv
@@ -328,7 +328,7 @@ python scrape_update_all.py
 python data_optimize.py
 ```
 
-### 7.2 Cloud Server Deployment
+### 5.2 Cloud Server Deployment
 ```bash
 # 1. Start the Flask API in the background (listen to all IPs)
 # Ensure api_server.py has app.run(host="0.0.0.0", port=5001)
@@ -345,6 +345,7 @@ sudo cp index.html /var/www/html/
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
 
 ```
+
 
 
 
