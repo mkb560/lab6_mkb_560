@@ -1,6 +1,12 @@
 # DSCI560 Lab 6 - Oil Wells Data Wrangling
 
-## Collaborative Project: Mingtao Ding (Extraction/Database Design), Yi-Hsien Lou (Scraping/Cleaning), Ke Wu (Frontend/Deployment)
+## Collaborative Project: 
+
+Mingtao Ding (Extraction/Database Design)  USC ID: 5538797503
+
+Yi-Hsien Lou (Scraping/Cleaning) USC ID: 1210391283
+
+Ke Wu (Frontend/Deployment) USC ID: 3385282229
 
 ---
 
@@ -26,7 +32,7 @@ Flask REST API (Backend) ↔ Leaflet.js Interactive Map (Frontend / Apache)
 
 ### 2.1 Raw PDF Files
 ```
-DSCI560_Lab5/                ← 77 PDF files
+DSCI560_Lab6/                ← 77 PDF files
 ├── W11745.pdf
 ├── W11920.pdf
 ├── W15358.pdf
@@ -336,4 +342,5 @@ sudo cp index.html /var/www/html/
 
 # 4. View the Map
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
+
 ```
