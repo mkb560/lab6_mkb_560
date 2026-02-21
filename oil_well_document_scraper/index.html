@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oil Well Interactive Map</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* Use Flexbox on the body to stack header, map, and footer */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Make the body exactly the height of the window */
+        }
+
+        /*Header*/
+        .app-header {
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .app-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .app-header p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        /* Map*/
+        #map {
+            flex-grow: 1; 
+            width: 100%;
+        }
+
+        /* Footer Styles */
+        .app-footer {
+            background-color: #ecf0f1;
+            color: #7f8c8d;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.85rem;
+            border-top: 1px solid #bdc3c7;
+            z-index: 1000;
+        }
+
+        /* Popup */
+        .well-popup {
+            max-width: 320px; 
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .well-popup h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .stim-record {
+            background: #f8f9fa;
+            border-left: 3px solid #e67e22;
+            padding: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1>North Dakota Oil Well Explorer</h1>
+        <p>Interactive Data Visualization mapping PDF records and DrillingEdge data</p>
+    </header>
+
+    <div id="map"></div>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Oil Well Database Project. Developed by Mingtao, Ke, and Yi-Hsien.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Initialize the map and set the starting view
+        const map = L.map('map').setView([47.5, -100.5], 7);
+
+        // Add the base map tiles 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const API_BASE_URL = "http://127.0.0.1:5001/api";
+
+        // Fetch the list of all wells to place the markers
+        fetch(`${API_BASE_URL}/wells`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "ok") {
+                    data.data.forEach(well => {
+                        if (well.latitude && well.longitude) {
+                            const marker = L.marker([well.latitude, well.longitude]).addTo(map);
+                            
+                            marker.bindPopup("Loading well details...");
+                            marker.hasLoadedData = false;
+                            
+                            marker.on('popupopen', () => {
+                                if (!marker.hasLoadedData) {
+                                    loadWellDetails(well.well_file_no, marker);
+                                    marker.hasLoadedData = true; 
+                                }
+                            });
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error("Error loading wells:", error));
+
+        // Function to fetch detailed info and stimulation data when a pin is clicked
+        function loadWellDetails(wellFileNo, marker) {
+            fetch(`${API_BASE_URL}/wells/${wellFileNo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "ok") {
+                        const info = data.well_info;
+                        const stims = data.stimulation_data;
+
+                        const formatData = (val) => {
+                            return (val && val !== "N/A") ? val : "Not Available";
+                        };
+
+                        // Build the HTML for the popup as a unified Info Card
+                        let popupHTML = `<div class="well-popup">`;
+                        popupHTML += `<h3>${info.well_name || 'Unknown Well'}</h3>`;
+                        
+                        popupHTML += `<b>API Number:</b> ${info.api_number || 'N/A'}<br>`;
+                        popupHTML += `<b>Operator:</b> ${info.operator || 'N/A'}<br>`;
+                        popupHTML += `<b>County:</b> ${info.county || 'N/A'}<br>`;
+                        popupHTML += `<b>Closest City:</b> ${formatData(info.scraped_closest_city)}<br>`;
+                        popupHTML += `<b>Status:</b> ${formatData(info.scraped_well_status)}<br>`;
+                        popupHTML += `<b>Type:</b> ${formatData(info.scraped_well_type)}<br>`;
+                        popupHTML += `<b>Oil Production:</b> ${formatData(info.scraped_oil_production)}<br>`;
+                        popupHTML += `<b>Gas Production:</b> ${formatData(info.scraped_gas_production)}<br>`;
+
+                        // 1. Filter out the ghost/empty records
+                        const validStims = stims ? stims.filter(stim => {
+                            return stim.date_stimulated && 
+                                   stim.date_stimulated !== 'N/A' && 
+                                   stim.date_stimulated.trim() !== '';
+                        }) : [];
+
+                        // 2. Blend the valid records directly into the text above
+                        if (validStims.length > 0) {
+                            validStims.forEach(stim => {
+                                popupHTML += `<b>Date:</b> ${stim.date_stimulated || 'N/A'}<br>`;
+                                popupHTML += `<b>Formation:</b> ${stim.stimulated_formation || 'N/A'}<br>`;
+                                popupHTML += `<b>Volume:</b> ${stim.volume || 'N/A'} ${stim.volume_units || ''}<br>`;
+                            });
+                        }
+                        
+                        popupHTML += `</div>`;
+                        marker.setPopupContent(popupHTML);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading details:", error);
+                    marker.setPopupContent("<b>Failed to load data. Please ensure the Flask server is running!</b>");
+                });
+        }
+   
+    </script>
+</body>
+</html>
