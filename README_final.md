@@ -32,7 +32,7 @@ Flask REST API (Backend) ↔ Leaflet.js Interactive Map (Frontend / Apache)
 
 ### 2.1 Raw PDF Files
 ```
-DSCI560_Lab6/                ← 77 PDF files
+Original_file/                ← 77 PDF files
 ├── W11745.pdf
 ├── W11920.pdf
 ├── W15358.pdf
@@ -345,6 +345,7 @@ sudo cp index.html /var/www/html/
 # Open a web browser and navigate to: http://YOUR_PUBLIC_IP
 
 ```
+
 
 
 
