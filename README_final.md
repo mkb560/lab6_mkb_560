@@ -283,6 +283,14 @@ python main.py --summary-only
 
 The workflow uses Selenium to automate the form-based search (API# → “Search Database” → click result) and uses requests + BeautifulSoup to parse the Well Details page efficiently.
 
+#### `scrape_one_drillingedge.py` - Single-well Scraping Test
+
+Utility script for testing the scraping logic on a single API number (form submission → result click → details parsing) before running batch updates.
+
+#### `update_one_to_db.py` - Single-row MySQL Update Test
+
+Validation script to update one well record in MySQL, used to confirm SQL `UPDATE` mapping and database write behavior before running the full batch job.
+
 ### Ke Wu (Frontend)
 
 #### `data_optimize.py`- Auto-correct typo in positional data
